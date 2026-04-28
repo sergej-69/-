@@ -1,0 +1,79 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
+import json
+import requests
+
+# Создаем главное окно
+root = tk.Tk()
+root.title("Currency Converter")
+
+# Валюты (можно позже сделать динамиски)
+currencies = ['USD', 'EUR', 'GBP', 'JPY', 'RUB', 'CNY']
+
+# Выбор валют "из"
+tk.Label(root, text="Из:").grid(row=0, column=0, padx=5, pady=5)
+from_currency = ttk.Combobox(root, values=currencies)
+from_currency.current(0)
+from_currency.grid(row=0, column=1, padx=5, pady=5)
+
+# Выбор валют "в"
+tk.Label(root, text="В:").grid(row=0, column=2, padx=5, pady=5)
+to_currency = ttk.Combobox(root, values=currencies)
+to_currency.current(1)
+to_currency.grid(row=0, column=3, padx=5, pady=5)
+
+# Поле для суммы
+tk.Label(root, text="Сумма:").grid(row=1, column=0, padx=5, pady=5)
+amount_entry = tk.Entry(root)
+amount_entry.grid(row=1, column=1, padx=5, pady=5)
+
+# Кнопка конвертации
+convert_btn = tk.Button(root, text="Конвертировать")
+convert_btn.grid(row=1, column=2, columnspan=2, padx=5, pady=5)
+
+# Таблица истории
+columns = ('from', 'to', 'amount', 'result')
+history_tree = ttk.Treeview(root, columns=columns, show='headings')
+for col in columns:
+    history_tree.heading(col, text=col)
+history_tree.grid(row=2, column=0, columnspan=4, padx=5, pady=5)
+
+# Запуск главного цикла
+root.mainloop()
+
+
+def get_exchange_rate(api_url, base, target):
+    response = requests.get(api_url)
+    data = response.json()
+    # Проверьте, что ключи есть
+    if data.get('rates') and data['rates'].get(target):
+        return data['rates'][target]
+    else:
+        raise Exception("Курс не найден или API недоступен")
+
+history_file = 'history.json'
+
+def load_history():
+    try:
+        with open(history_file, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return []
+
+def save_history(entry):
+    history = load_history()
+    history.append(entry)
+    with open(history_file, 'w') as f:
+        json.dump(history, f, ensure_ascii=False, indent=try:
+    amount = float(amount_entry.get())
+    if amount <= 0:
+        raise ValueError
+except ValueError:
+    messagebox.showerror("Ошибка", "Введите положительное число для суммы.")
+    return
+
+git init
+git add .
+git commit -m "Initial commit"
+
+
